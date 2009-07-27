@@ -4,12 +4,13 @@ use 5.008_001;
 use strict;
 use warnings;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 use XSLoader;
 XSLoader::load(__PACKAGE__, $VERSION);
 
 use Sub::Attribute;
+use XS::MRO::Compat;
 
 1;
 __END__
