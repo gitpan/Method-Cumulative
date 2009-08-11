@@ -10,7 +10,7 @@ cc_warnings;
 
 requires 'Sub::Attribute';
 
-requires_xs 'XS::MRO::Compat';
+requires_xs 'XS::MRO::Compat' => 0.13;
 
 test_requires 'Test::More'      => 0.62;
 test_requires 'Test::LeakTrace' => 0.08;
