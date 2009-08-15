@@ -3,7 +3,7 @@ package Module::Install::XSUtil;
 
 use 5.005_03;
 
-$VERSION = '0.07';
+$VERSION = '0.09';
 
 use Module::Install::Base;
 @ISA     = qw(Module::Install::Base);
@@ -186,10 +186,12 @@ sub requires_xs{
 	my %added = $self->requires(@_);
 	my(@inc, @libs);
 
+	my $rx_lib    = qr{ \. (?: lib | a) \z}xmsi;
+	my $rx_dll    = qr{ \. dll          \z}xmsi; # for Cygwin
+
 	while(my $module = each %added){
 		my $mod_basedir = File::Spec->join(split /::/, $module);
-		my $rx_header = qr{\A ( .+ \Q$mod_basedir\E ) .+ \. h(?:pp)? \z}xmsi;
-		my $rx_lib    = qr{\A ( .+ \Q$mod_basedir\E ) .+ \. (?: lib | dll | a) \z}xmsi;
+		my $rx_header = qr{\A ( .+ \Q$mod_basedir\E ) .+ \. h(?:pp)?     \z}xmsi;
 
 		SCAN_INC: foreach my $inc_dir(@INC){
 			my @dirs = grep{ -e } File::Spec->join($inc_dir, 'auto', $mod_basedir), File::Spec->join($inc_dir, $mod_basedir);
@@ -201,9 +203,15 @@ sub requires_xs{
 				if(my($incdir) = $File::Find::name =~ $rx_header){
 					push @inc, $incdir;
 				}
-				elsif(my($libdir) = $File::Find::name =~ $rx_lib){
+				elsif($File::Find::name =~ $rx_lib){
 					my($libname) = $_ =~ /\A (?:lib)? (\w+) /xmsi;
-					push @libs, [$libname, $libdir];
+					push @libs, [$libname, $File::Find::dir];
+				}
+				elsif($File::Find::name =~ $rx_dll){
+					# XXX: hack for Cygwin
+					my $mm = $self->makemaker_args;
+					$mm->{macro}->{PERL_ARCHIVE_AFTER} ||= '';
+					$mm->{macro}->{PERL_ARCHIVE_AFTER}  .= ' ' . $File::Find::name;
 				}
 			}, @dirs);
 
@@ -252,7 +260,7 @@ sub cc_src_paths{
 			_verbose "c: $c" if _VERBOSE;
 		}
 
-		push @{$C_ref}, $c;
+		push @{$C_ref}, $c unless grep{ $_ eq $c } @{$C_ref};
 	}
 
 	$self->cc_append_to_inc('.');
@@ -436,4 +444,4 @@ sub const_cccmd {
 1;
 __END__
 
-#line 570
+#line 578

@@ -28,9 +28,10 @@ no_index:
     - xt
 requires:
   Sub::Attribute: 0
-  XS::MRO::Compat: 0.13
+  XS::MRO::Compat: 0
+  XS::MagicExt: 0
   perl: 5.8.1
 resources:
   license: http://dev.perl.org/licenses/
   repository: git://github.com/gfx/Perl-Method-Cumulative.git
-version: 0.04
+version: 0.05

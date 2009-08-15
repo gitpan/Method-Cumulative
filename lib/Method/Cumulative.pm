@@ -4,12 +4,13 @@ use 5.008_001;
 use strict;
 use warnings;
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 use XSLoader;
 XSLoader::load(__PACKAGE__, $VERSION);
 
 use Sub::Attribute;
+use XS::MagicExt;
 use XS::MRO::Compat;
 
 1;
@@ -21,7 +22,7 @@ Method::Cumulative - Accumulates the effect of methods in a class hierarchy
 
 =head1 VERSION
 
-This document describes Method::Cumulative version 0.04.
+This document describes Method::Cumulative version 0.05.
 
 =head1 SYNOPSIS
 

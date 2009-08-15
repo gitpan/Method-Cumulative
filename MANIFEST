@@ -1,7 +1,8 @@
 benchmark/vs_next.pl
 Changes
 Cumulative.xs
-example/cumulative.pl
+example/base_first.pl
+example/derived_first.pl
 inc/Module/Install.pm
 inc/Module/Install/AuthorTests.pm
 inc/Module/Install/Base.pm
@@ -17,7 +18,6 @@ Makefile.PL
 MANIFEST			This list of files
 MANIFEST.SKIP
 META.yml
-mgx.h
 README
 t/00_load.t
 t/01_basic.t
